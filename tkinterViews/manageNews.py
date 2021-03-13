@@ -32,7 +32,8 @@ class ManageNews(tk.Frame):
         self.create_delete_from_db_btn()
         self.create_new_news_components()
         self.fill_list_view()
-        self.winfo_toplevel().title("Cats opinion admin panel - Edit news box")
+        self.winfo_toplevel().title("Cats opinion admin panel - Edit news")
+
 
     def create_hint_headers(self):
         self.remove_hint["text"] = "Remove existing news"
@@ -58,21 +59,21 @@ class ManageNews(tk.Frame):
     def create_new_news_components(self):
         # headline
         self.headline_label["text"] = "Insert headline"
-        self.headline_label.grid(row=1, column=1, padx=(self.padding_for_x, 0))
+        self.headline_label.grid(row=1, column=2, padx=(self.padding_for_x, 0))
         self.headline["height"] = 2
         self.headline["width"] = 50
-        self.headline.grid(row=1, column=2, padx=(self.padding_for_x, 0))
+        self.headline.grid(row=2, column=2, padx=(self.padding_for_x, 0))
         # message
         self.message_label["text"] = "Insert message"
-        self.message_label.grid(row=2, column=1, padx=(self.padding_for_x, 0))
+        self.message_label.grid(row=3, column=2, padx=(self.padding_for_x, 0))
         self.message["height"] = 2
         self.message["width"] = 50
-        self.message.grid(row=2, column=2, padx=(self.padding_for_x, 0))
+        self.message.grid(row=4, column=2, padx=(self.padding_for_x, 0))
         # date
         self.date_label["text"] = "Current date"
-        self.date_label.grid(row=3, column=1, padx=(self.padding_for_x, 0))
+        self.date_label.grid(row=5, column=2, padx=(self.padding_for_x, 0))
         self.news_date.insert(0, date.today().strftime("%d.%m.%Y"))
-        self.news_date.grid(row=3, column=2, padx=(self.padding_for_x, 0))
+        self.news_date.grid(row=6, column=2, padx=(self.padding_for_x, 0))
         # button
         self.add_news["text"] = "Save"
         self.add_news["command"] = self.save_to_db
@@ -80,7 +81,7 @@ class ManageNews(tk.Frame):
         self.add_news["fg"] = "white"
         self.add_news["padx"] = 10
         self.add_news["pady"] = 10
-        self.add_news.grid(row=4, column=2, padx=(self.padding_for_x, 0))
+        self.add_news.grid(row=7, column=2, padx=(self.padding_for_x, 0))
 
     def fill_list_view(self):
         self.list_of_news.insert(0, "python")
