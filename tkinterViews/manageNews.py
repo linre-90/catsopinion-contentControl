@@ -2,7 +2,7 @@ import tkinter as tk
 from datetime import date
 import news
 import tkinter.ttk as tt
-from tkinter.messagebox import showerror, showinfo
+from tkinter.messagebox import showerror, showinfo, askyesno
 
 
 class ManageNews(tk.Frame):
@@ -110,26 +110,30 @@ class ManageNews(tk.Frame):
             self.list_of_news.selection_set(first=0)
 
     def delete_trigger(self):
-        response = self.news_handler.delete_one(self.list_of_news.get(tk.ACTIVE))
-        if response[0] == "error":
-            self.create_alert(response[1])
-        else:
-            showinfo("Removed", "News item removed successfully", parent=self.master)
-        self.fill_list_view(self.news_handler.get_news())
+        deleting = askyesno("Deleting", "Are you sure you want to delete?", parent=self.master)
+        if deleting:
+            response = self.news_handler.delete_one(self.list_of_news.get(tk.ACTIVE))
+            if response[0] == "error":
+                self.create_alert(response[1])
+            else:
+                showinfo("Removed", "News item removed successfully", parent=self.master)
+            self.fill_list_view(self.news_handler.get_news())
 
     def save_to_db(self):
-        data = {
-            "headline": self.headline.get("1.0", "end-1c"),
-            "message": self.message.get("1.0", "end-1c"),
-            "date": self.news_date.get(),
-            "locale": self.language_select.get()
-        }
-        response = self.news_handler.insert_new(data, self.language_select.get())
-        if response[0] == "error":
-            self.create_alert(response[1])
-        else:
-            showinfo("Saved", "Succesfully saved", parent=self.master)
-            self.fill_list_view(self.news_handler.get_news())
+        saving = askyesno("Saving", "Are you sure you want to save?", parent=self.master)
+        if saving:
+            data = {
+                "headline": self.headline.get("1.0", "end-1c"),
+                "message": self.message.get("1.0", "end-1c"),
+                "date": self.news_date.get(),
+                "locale": self.language_select.get()
+            }
+            response = self.news_handler.insert_new(data, self.language_select.get())
+            if response[0] == "error":
+                self.create_alert(response[1])
+            else:
+                showinfo("Saved", "Succesfully saved", parent=self.master)
+                self.fill_list_view(self.news_handler.get_news())
 
     def create_alert(self, message):
         showerror("Error", message, parent=self.master)

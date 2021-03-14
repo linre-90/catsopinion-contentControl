@@ -11,7 +11,6 @@ class News:
 
     def get_news(self):
         try:
-            firebase_admin.get_app()
             db = firestore.client()
             news_array = []
             for i in self.database_entry.news_collections():
@@ -43,7 +42,6 @@ class News:
 
     def insert_single(self, collection, item):
         try:
-            firebase_admin.get_app()
             db = firestore.client()
             db.collection(collection).add(item)
             return [""]

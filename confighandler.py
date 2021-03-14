@@ -27,3 +27,6 @@ class ConfigHandler:
             return self.config.get("DBCOLLECTIONS", "newsfi")
         elif locale == "en":
             return self.config.get("DBCOLLECTIONS", "newsen")
+
+    def get_message_collection(self):
+        return self.config.get("DBMESSAGECOLLECTIONS", "messages")
