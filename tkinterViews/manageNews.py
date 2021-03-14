@@ -2,6 +2,7 @@ import tkinter as tk
 from datetime import date
 import news
 import tkinter.ttk as tt
+from tkinter.messagebox import showerror, showinfo
 
 
 class ManageNews(tk.Frame):
@@ -98,21 +99,37 @@ class ManageNews(tk.Frame):
         self.add_news.grid(row=9, column=2, padx=(self.padding_for_x, 0))
 
     def fill_list_view(self, data):
-        index = 0
-        for new in data:
-            self.list_of_news.insert(index, new)
-            index += 1
-        self.list_of_news.selection_set(first=0)
+        self.list_of_news.delete(0, tk.END)
+        if data[0] == "error":
+            self.create_alert(data[1])
+        else:
+            index = 0
+            for new in data:
+                self.list_of_news.insert(index, new)
+                index += 1
+            self.list_of_news.selection_set(first=0)
 
     def delete_trigger(self):
-        self.news_handler.delete_one(self.list_of_news.get(tk.ACTIVE))
-        self.list_of_news.delete(0, tk.END)
+        response = self.news_handler.delete_one(self.list_of_news.get(tk.ACTIVE))
+        if response[0] == "error":
+            self.create_alert(response[1])
+        else:
+            showinfo("Removed", "News item removed successfully", parent=self.master)
         self.fill_list_view(self.news_handler.get_news())
 
     def save_to_db(self):
         data = {
             "headline": self.headline.get("1.0", "end-1c"),
             "message": self.message.get("1.0", "end-1c"),
-            "date": self.news_date.get()
+            "date": self.news_date.get(),
+            "locale": self.language_select.get()
         }
-        self.news_handler.insert_new(data, self.language_select.get())
+        response = self.news_handler.insert_new(data, self.language_select.get())
+        if response[0] == "error":
+            self.create_alert(response[1])
+        else:
+            showinfo("Saved", "Succesfully saved", parent=self.master)
+            self.fill_list_view(self.news_handler.get_news())
+
+    def create_alert(self, message):
+        showerror("Error", message, parent=self.master)

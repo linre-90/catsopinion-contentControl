@@ -1,5 +1,6 @@
 import confighandler as cfh
 
+
 class Blog:
     def __init__(self):
         self.config_wizard = cfh.ConfigHandler()
