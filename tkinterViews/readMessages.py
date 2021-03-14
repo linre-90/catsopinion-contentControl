@@ -19,7 +19,7 @@ class ReadMessages(tk.Frame):
         self.scroll.config(command=self.list.yview)
         self.scroll_hor.config(command=self.list.xview)
         self.delete_btn = tk.Button(self, bg="red", text="Delete", padx=5, pady=5, command=self.delete_message)
-        self.read_btn = tk.Button(self, text="Read message", padx=5, pady=5, command=self.read_message)
+        self.read_btn = tk.Button(self, bg="green", text="Read message", padx=5, pady=5, command=self.read_message)
         self.list.pack()
         self.delete_btn.pack()
         self.read_btn.pack()
@@ -49,7 +49,10 @@ class ReadMessages(tk.Frame):
                 showerror("Error", "message you are deleting is decoration!", parent=self.master)
 
     def read_message(self):
-        dic_message = ast.literal_eval(self.list.get(tk.ACTIVE))
-        info_header = "Headline: "+dic_message["headline"]
-        info_message = "type: "  + dic_message["type"] + "\n\n" +"Message: " + dic_message["message"] + "\n\n" + "Sender: " + dic_message["email"] + "\n\n" + "id: " + dic_message["uid"]
-        showinfo(info_header, info_message, parent=self.master)
+        try:
+            dic_message = ast.literal_eval(self.list.get(tk.ACTIVE))
+            info_header = "Headline: "+dic_message["headline"]
+            info_message = "type: "  + dic_message["type"] + "\n\n" +"Message: " + dic_message["message"] + "\n\n" + "Sender: " + dic_message["email"] + "\n\n" + "id: " + dic_message["uid"]
+            showinfo(info_header, info_message, parent=self.master)
+        except SyntaxError:
+            showerror("Error", "message you are trying to red is decoration!", parent=self.master)

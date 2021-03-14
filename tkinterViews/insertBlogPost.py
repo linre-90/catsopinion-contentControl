@@ -1,6 +1,8 @@
 import tkinter as tk
 import tkinter.ttk as tt
 import blog as blg
+from tkinter.messagebox import askyesno
+
 
 class InsertBlog(tk.Frame):
     def __init__(self, master=None):
@@ -91,19 +93,22 @@ class InsertBlog(tk.Frame):
 
     def build_save_button(self):
         self.save_btn["text"] = "Save"
+        self.save_btn["bg"] = "green"
         self.save_btn["command"] = self.trigger_saving
         self.save_btn.pack()
 
     def trigger_saving(self):
-        data = {
-            "date": self.date_input.get("1.0", "end-1c"),
-            "description": self.description_input.get("1.0", "end-1c"),
-            "dislikes": 0,
-            "headerIMG": self.headerIMG_input.get("1.0", "end-1c"),
-            "likes": 0,
-            "locale": self.language_select.get(),
-            "series": self.series_select.get(),
-            "title": self.title_input.get("1.0", "end-1c"),
-            "view": self.view_input.get("1.0", "end-1c")
-        }
-        self.blog_handler.save_blog_post(data, self.language_select.get())
+        saving = askyesno("Saving", "Are you sure you want to save new blog post?", parent=self.master)
+        if saving:
+            data = {
+                "date": self.date_input.get("1.0", "end-1c"),
+                "description": self.description_input.get("1.0", "end-1c"),
+                "dislikes": 0,
+                "headerIMG": self.headerIMG_input.get("1.0", "end-1c"),
+                "likes": 0,
+                "locale": self.language_select.get(),
+                "series": self.series_select.get(),
+                "title": self.title_input.get("1.0", "end-1c"),
+                "view": self.view_input.get("1.0", "end-1c")
+            }
+            self.blog_handler.save_blog_post(data, self.language_select.get())
