@@ -1,17 +1,27 @@
 import tkinter as tk
 from datetime import date
+import news
+import tkinter.ttk as tt
 
 
 class ManageNews(tk.Frame):
     def __init__(self, master=None):
         self.padding_for_x = 30
         self.padding_for_y = 30
+        self.news_handler = news.News()
         super().__init__(master)
+        # lang
+        self.languages = ["fi", "en"]
+        self.selected = tk.StringVar()
+        self.language_label = tk.Label(self)
+        self.language_select = tt.Combobox(self, textvariable=self.selected, values=self.languages)
+        self.build_language_field()
         # hint labels:
         self.remove_hint = tk.Label(self)
         self.add_new_hint = tk.Label(self)
         # lists all current news
         self.list_of_news = tk.Listbox(self)
+        self.fill_list_view(self.news_handler.get_news())
         # delete from db button
         self.delete_from_db = tk.Button(self)
         # create new: headline field
@@ -31,9 +41,13 @@ class ManageNews(tk.Frame):
         self.create_list_view()
         self.create_delete_from_db_btn()
         self.create_new_news_components()
-        self.fill_list_view()
         self.winfo_toplevel().title("Cats opinion admin panel - Edit news")
 
+    def build_language_field(self):
+        self.selected.set(self.languages[0])
+        self.language_label["text"] = "Select language"
+        self.language_label.grid(row=7, column=2, padx=(self.padding_for_x, 0))
+        self.language_select.grid(row=8, column=2, padx=(self.padding_for_x, 0))
 
     def create_hint_headers(self):
         self.remove_hint["text"] = "Remove existing news"
@@ -81,17 +95,19 @@ class ManageNews(tk.Frame):
         self.add_news["fg"] = "white"
         self.add_news["padx"] = 10
         self.add_news["pady"] = 10
-        self.add_news.grid(row=7, column=2, padx=(self.padding_for_x, 0))
+        self.add_news.grid(row=9, column=2, padx=(self.padding_for_x, 0))
 
-    def fill_list_view(self):
-        self.list_of_news.insert(0, "python")
-        self.list_of_news.insert(1, "asdaksjhda")
+    def fill_list_view(self, data):
+        index = 0
+        for new in data:
+            self.list_of_news.insert(index, new)
+            index += 1
         self.list_of_news.selection_set(first=0)
-        # TODO load from db
 
     def delete_trigger(self):
-        print(self.list_of_news.get("active"))
-        # TODO delete from news db
+        self.news_handler.delete_one(self.list_of_news.get(tk.ACTIVE))
+        self.list_of_news.delete(0, tk.END)
+        self.fill_list_view(self.news_handler.get_news())
 
     def save_to_db(self):
         data = {
@@ -99,5 +115,4 @@ class ManageNews(tk.Frame):
             "message": self.message.get("1.0", "end-1c"),
             "date": self.news_date.get()
         }
-        # TODO save to database
-        print(data)
+        self.news_handler.insert_new(data, self.language_select.get())

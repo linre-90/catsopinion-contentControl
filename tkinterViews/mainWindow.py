@@ -27,23 +27,14 @@ class Application(tk.Frame):
         self.messages.pack(side="left", padx=25)
 
     def move_to_blog_manager(self):
-        # TODO read from config file
-        series = ["personal", "what is my cat?"]
         manage_blog = tk.Tk()
         manage_blog.geometry("1280x720")
-        Ib.InsertBlog(master=manage_blog, series_list=series).mainloop()
-
+        Ib.InsertBlog(master=manage_blog).mainloop()
 
     def move_to_message_manager(self):
-        # TODO read messages from db
-        dummy_messages = [
-            {"uid": "123", "headline": "asdasd", "date": "12/3/2021", "message": "test messagedasdajsdkjasdaksjhdkasjdalsjdhlaksjdhalksjdhalskjdhalsjdhaksjdhlasjdhalksjhdklasjhdjhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh", "name": "", "type": "question", "email":""},
-            {"uid": "321", "headline": "dsadsa", "date": "10/3/2021", "message": "test message", "name": "", "type": "question", "email": "asd@asd.com"},
-            {"uid": "777", "headline": "teststststs", "date": "11/3/2021", "message": "test message", "name": "", "type": "question", "email": ""}
-        ]
         message_root = tk.Tk()
         message_root.geometry("1280x720")
-        Rm.ReadMessages(master=message_root, messages=dummy_messages).mainloop()
+        Rm.ReadMessages(master=message_root).mainloop()
 
     def move_to_news_manager(self):
         manage_root = tk.Tk()

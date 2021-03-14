@@ -1,9 +1,11 @@
 import json
 import tkinter as tk
+import message as mg
 
 
 class ReadMessages(tk.Frame):
-    def __init__(self, master=None, messages=None):
+    def __init__(self, master=None):
+        self.message_handler = mg.Message()
         super().__init__(master)
         self.scroll = tk.Scrollbar(self, orient="vertical")
         self.scroll_hor = tk.Scrollbar(self, orient="horizontal")
@@ -11,7 +13,7 @@ class ReadMessages(tk.Frame):
         self.scroll_hor.pack(side="bottom", fill="x")
         self.list = tk.Listbox(self, height=100, width=190, font=("Times", 12))
         self.index = 0
-        for message in messages:
+        for message in self.message_handler.get_messages():
             self.list.insert(self.index, json.dumps(message))
             self.index += 1
             self.list.insert(self.index, "----*****----")

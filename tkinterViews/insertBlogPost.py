@@ -1,9 +1,10 @@
 import tkinter as tk
 import tkinter.ttk as tt
-
+import blog as blg
 
 class InsertBlog(tk.Frame):
-    def __init__(self, master=None, series_list=None):
+    def __init__(self, master=None):
+        self.blog_handler = blg.Blog()
         super().__init__(master)
         # languages
         self.languages = ["fi", "en"]
@@ -21,9 +22,9 @@ class InsertBlog(tk.Frame):
         self.build_description_fields()
         # series
         self.series_selected = tk.StringVar()
-        self.series_selected.set(series_list[0])
+        self.series_selected.set(self.blog_handler.get_series()[0])
         self.series_label = tk.Label(self)
-        self.series_select = tt.Combobox(self, textvariable=self.series_selected, values=series_list)
+        self.series_select = tt.Combobox(self, textvariable=self.series_selected, values=self.blog_handler.get_series())
         self.build_series_field()
         # header img
         self.headerIMG_label = tk.Label(self)
@@ -94,4 +95,15 @@ class InsertBlog(tk.Frame):
         self.save_btn.pack()
 
     def trigger_saving(self):
-        print("save to db")
+        data = {
+            "date": self.date_input.get("1.0", "end-1c"),
+            "description": self.description_input.get("1.0", "end-1c"),
+            "dislikes": 0,
+            "headerIMG": self.headerIMG_input.get("1.0", "end-1c"),
+            "likes": 0,
+            "locale": self.language_select.get(),
+            "series": self.series_select.get(),
+            "title": self.title_input.get("1.0", "end-1c"),
+            "view": self.view_input.get("1.0", "end-1c")
+        }
+        self.blog_handler.save_blog_post(data, self.language_select.get())
